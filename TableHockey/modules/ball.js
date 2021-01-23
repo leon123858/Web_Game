@@ -28,3 +28,7 @@ ball.prototype.move = function () {
   this._x += this._v * Math.cos(this._vg);
   this._y -= this._v * Math.sin(this._vg);
 };
+
+ball.prototype.setVelocity = function (v) {
+  this._v = v;
+};

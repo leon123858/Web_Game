@@ -5,6 +5,11 @@ class printer {
   }
 }
 
+printer.prototype._clearCanvas = function () {
+  let context = this._canvas.getContext("2d");
+  context.height = context.height;
+};
+
 printer.prototype._showBall = function (ball) {
   let context = this._canvas.getContext("2d");
   context.fillStyle = "#0000ff";
@@ -17,11 +22,12 @@ printer.prototype._showBall = function (ball) {
 };
 
 printer.prototype.show = function (array) {
+  this._clearCanvas();
   array.forEach((element) => {
     switch (element.type) {
       case "ball":
         this._showBall(element);
-        console.log("showball");
+        console.log("show ball");
         break;
       default:
         console.log("show default :" + " " + element.type);

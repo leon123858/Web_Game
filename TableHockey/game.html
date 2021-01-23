@@ -5,8 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/style.css">
-    <script src="./component/ball.js"></script>
-    <script src="./component/printer.js"></script>
+    <script src="./modules/ball.js"></script>
+    <script src='./modules/printer.js'></script>
+    <script src="./modules/time.js"></script>
     <title>桌上曲棍球</title>
 </head>
 
@@ -14,10 +15,13 @@
     <canvas id="canvas">
 
     </canvas>
+
     <script>
-        var Tball = new ball(3, 10, 30, 30);
-        var Tprinter = new printer("canvas");
-        Tprinter.show([Tball]);
+        const Printer = new printer('canvas');
+        var Ball = new ball(3, 4, 20, 20)
+        var Timer = new timer(40, Printer);
+        Timer.addMission(Ball);
+        Timer.Run();
     </script>
 </body>
 
