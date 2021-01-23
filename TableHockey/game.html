@@ -6,16 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/style.css">
     <script src="./component/ball.js"></script>
+    <script src="./component/printer.js"></script>
     <title>桌上曲棍球</title>
 </head>
 
 <body>
-    <canvas>
+    <canvas id="canvas">
 
     </canvas>
     <script>
-        var Tball = new ball(3, 4);
-        console.log(Tball.R);
+        var Tball = new ball(3, 10, 30, 30);
+        var Tprinter = new printer("canvas");
+        Tprinter.show([Tball]);
     </script>
 </body>
 
