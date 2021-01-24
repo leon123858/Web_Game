@@ -26,10 +26,10 @@ printer.prototype.show = function (array) {
     switch (element.type) {
       case "ball":
         this._showBall(element);
-        console.log("show ball");
+        //console.log("show ball");
         break;
       default:
-        console.log("show default :" + " " + element.type);
+        //console.log("show default :" + " " + element.type);
         break;
     }
   });

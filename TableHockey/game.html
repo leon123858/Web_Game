@@ -19,8 +19,10 @@
     <script>
         const Printer = new printer('canvas');
         var Ball = new ball(3, 4, 20, 20)
-        var Timer = new timer(40, Printer);
-        Ball.setVelocity(10);
+        var Timer = new timer(20, Printer);
+        Ball.setVelocity(5);
+        Ball.addCollisionThing(200, 0, 200, 800);
+        Ball.addCollisionThing(0, 0, 0, 800);
         Timer.addMission(Ball);
         Timer.Run();
     </script>

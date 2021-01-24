@@ -30,9 +30,13 @@ ball.prototype.addCollisionThing = function (x1, y1, x2, y2) {
   this._collisionWall.push(li);
 };
 
-ball.prototype.detectWallCollision = function () {
-  for (var i in this._collisionWall) {
-  }
+ball.prototype.detectWallCollision = function (Ox, Oy, Nx, Ny) {
+  for (var i in this._collisionWall)
+    if (Nx > this._collisionWall[i][0]) {
+      this._vg += Math.PI;
+    } else if (Nx < this._collisionWall[i][0]) {
+      this._vg += Math.PI;
+    }
 };
 
 ball.prototype.move = function () {
@@ -46,3 +50,30 @@ ball.prototype.move = function () {
 ball.prototype.setVelocity = function (v) {
   this._v = v;
 };
+
+function PointsDistance(x1, x2, y1, y2) {
+  return Math.sqrt(Math.pow(x2 - x1) + Math.pow(y2 - y1));
+}
+
+//兩移動物碰撞演算法(時間切片)
+// var x1Stage = (Nx - Ox) / 50;
+// var y1Stage = (Ny - Oy) / 50;
+// for (var i in this._collisionWall) {
+//   var x2Stage = (this._collisionWall[i][2] - this._collisionWall[i][0]) / 50;
+//   var y2Stage = (this._collisionWall[i][3] - this._collisionWall[i][1]) / 50;
+//   var j = 0;
+//   while (true) {
+//     let x1 = Ox + j * x1Stage;
+//     let x2 = this._collisionWall[i][0] + j * x2Stage;
+//     let y1 = Oy + j * y1Stage;
+//     let y2 = this._collisionWall[i][1] + j * y2Stage;
+//     console.log(x1, x2, y1, y2);
+//     if (x1 > Nx || y1 > Ny) break;
+//     if (PointsDistance(x1, x2, y1, y2) < this._r) {
+//       //撞牆
+//       this._vg += Math.PI;
+//       console.log(this._vg);
+//     }
+//     j++;
+//   }
+// }
