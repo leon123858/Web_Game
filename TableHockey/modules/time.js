@@ -11,10 +11,15 @@ timer.prototype.addMission = function (element) {
 };
 
 timer.prototype._eachRound = function () {
-  for (var i in this.MissionList) this.MissionList[i].move();
+  for (var i in this.MissionList) {
+    this.MissionList[i].move();
+  }
   this._printer.show(this.MissionList);
 };
 
 timer.prototype.Run = function () {
-  window.setInterval(this._eachRound(), this._ms);
+  let time = this;
+  window.setInterval(function () {
+    time._eachRound();
+  }, time._ms);
 };

@@ -20,6 +20,7 @@
         const Printer = new printer('canvas');
         var Ball = new ball(3, 4, 20, 20)
         var Timer = new timer(40, Printer);
+        Ball.setVelocity(10);
         Timer.addMission(Ball);
         Timer.Run();
     </script>

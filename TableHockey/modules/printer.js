@@ -6,8 +6,7 @@ class printer {
 }
 
 printer.prototype._clearCanvas = function () {
-  let context = this._canvas.getContext("2d");
-  context.height = context.height;
+  this._canvas.height = this._canvas.height;
 };
 
 printer.prototype._showBall = function (ball) {
