@@ -1,3 +1,5 @@
+document.write("<script src='modules/vector.js'></script>");
+
 class ball {
   constructor(m, r, x, y) {
     this.type = "ball"; //類別
@@ -31,12 +33,19 @@ ball.prototype.addCollisionThing = function (x1, y1, x2, y2) {
 };
 
 ball.prototype.detectWallCollision = function (Ox, Oy, Nx, Ny) {
-  for (var i in this._collisionWall)
-    if (Nx > this._collisionWall[i][0]) {
+  for (var i in this._collisionWall) {
+    let li = this._collisionWall[i];
+    let ballV = new vector(Ox, Oy, Nx, Ny);
+    let WallV = new vector(li[0], li[1], li[2], li[3]);
+    let pad = ballV.ifBallImpact(WallV, this.r);
+    //console.log(pad);
+    if (pad > 0) {
       this._vg += Math.PI;
-    } else if (Nx < this._collisionWall[i][0]) {
-      this._vg += Math.PI;
+      if (this._vg > Math.PI * 2) this._vg -= Math.PI * 2;
+      //this._x += pad * Math.cos(this._vg);
+      //this._y -= pad * Math.sin(this._vg);
     }
+  }
 };
 
 ball.prototype.move = function () {
@@ -51,9 +60,9 @@ ball.prototype.setVelocity = function (v) {
   this._v = v;
 };
 
-function PointsDistance(x1, x2, y1, y2) {
-  return Math.sqrt(Math.pow(x2 - x1) + Math.pow(y2 - y1));
-}
+// function PointsDistance(x1, x2, y1, y2) {
+//   return Math.sqrt(Math.pow(x2 - x1) + Math.pow(y2 - y1));
+// }
 
 //兩移動物碰撞演算法(時間切片)
 // var x1Stage = (Nx - Ox) / 50;
