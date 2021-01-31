@@ -17,6 +17,7 @@ class vector {
     );
     return V;
   }
+  get reflectAngle(angle) {}
 }
 
 vector.prototype.dot = function (v2) {
@@ -25,7 +26,7 @@ vector.prototype.dot = function (v2) {
 };
 
 vector.prototype.XoToLineDistance = function (x1, y1, x2, y2) {
-  //三角形三个边长
+  //triangle's three side
   var A = Math.abs(
     Math.sqrt(Math.pow(this.Xo - x1, 2) + Math.pow(this.Yo - y1, 2))
   );
@@ -33,11 +34,10 @@ vector.prototype.XoToLineDistance = function (x1, y1, x2, y2) {
     Math.sqrt(Math.pow(this.Xo - x2, 2) + Math.pow(this.Yo - y2, 2))
   );
   var C = Math.abs(Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2)));
-  //利用海伦公式计算三角形面积
-  //周长的一半
+  //use sea dragon formula to get the area for triangle
   var P = (A + B + C) / 2;
   var allArea = Math.abs(Math.sqrt(P * (P - A) * (P - B) * (P - C)));
-  //普通公式计算三角形面积反推点到线的垂直距离
+  //use area reverse to height
   var dis = (2 * allArea) / C;
   return dis;
 };
@@ -51,8 +51,8 @@ vector.prototype.ifBallImpact = function (v2, r) {
   //console.log(projectionLength, distance);
   if (projectionLength > distance - pad)
     return [
-      (projectionLength - distance + pad) * (this.X / this.length),
-      (projectionLength - distance + pad) * (this.Y / this.length),
+      -(projectionLength - distance + pad) * (this.X / this.length),
+      -(projectionLength - distance + pad) * (this.Y / this.length),
     ];
-  else return 0;
+  else return [0, 0];
 };

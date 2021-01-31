@@ -19,8 +19,9 @@
     <script>
         const Printer = new printer('canvas');
         var Ball = new ball(3, 4, 50, 50)
-        var Timer = new timer(30, Printer);
-        Ball.setVelocity(3);
+        var Timer = new timer(40, Printer);
+        Ball.setVelocity(6);
+        Ball._vg = Math.PI / 16
         Ball.addCollisionThing(200, 0, 200, 800);
         Ball.addCollisionThing(0, 0, 0, 800);
         Timer.addMission(Ball);
