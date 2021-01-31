@@ -20,7 +20,7 @@
         const Printer = new printer('canvas');
         var Ball = new ball(3, 4, 50, 50)
         var Timer = new timer(30, Printer);
-        Ball.setVelocity(8);
+        Ball.setVelocity(3);
         Ball.addCollisionThing(200, 0, 200, 800);
         Ball.addCollisionThing(0, 0, 0, 800);
         Timer.addMission(Ball);

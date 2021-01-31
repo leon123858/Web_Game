@@ -38,12 +38,13 @@ ball.prototype.detectWallCollision = function (Ox, Oy, Nx, Ny) {
     let ballV = new vector(Ox, Oy, Nx, Ny);
     let WallV = new vector(li[0], li[1], li[2], li[3]);
     let pad = ballV.ifBallImpact(WallV, this.r);
-    //console.log(pad);
-    if (pad > 0) {
+    console.log(pad);
+    if (pad[0] > 0 || pad[1] > 0) {
       this._vg += Math.PI;
+      console.log(this._vg);
       if (this._vg > Math.PI * 2) this._vg -= Math.PI * 2;
-      //this._x += pad * Math.cos(this._vg);
-      //this._y -= pad * Math.sin(this._vg);
+      this._x -= pad[0];
+      this._y += pad[1];
     }
   }
 };
