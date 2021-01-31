@@ -17,7 +17,6 @@ class vector {
     );
     return V;
   }
-  get reflectAngle(angle) {}
 }
 
 vector.prototype.dot = function (v2) {
@@ -43,16 +42,23 @@ vector.prototype.XoToLineDistance = function (x1, y1, x2, y2) {
 };
 
 //v2 is wall's vector, r is ball's radius
-vector.prototype.ifBallImpact = function (v2, r) {
+vector.prototype.ifBallImpactWall = function (v2, r) {
   //console.log(v2);
   let pad = 0;
   let projectionLength = this.dot(v2.normal) + 2 * r;
   let distance = this.XoToLineDistance(v2.Xo, v2.Yo, v2.Xn, v2.Yn) + r;
   //console.log(projectionLength, distance);
-  if (projectionLength > distance - pad)
-    return [
-      -(projectionLength - distance + pad) * (this.X / this.length),
-      -(projectionLength - distance + pad) * (this.Y / this.length),
-    ];
-  else return [0, 0];
+  // if (projectionLength > distance - pad)
+  //   return [
+  //     -(projectionLength - distance + pad) * (this.X / this.length),
+  //     -(projectionLength - distance + pad) * (this.Y / this.length),
+  //   ];
+  // else return [0, 0];
+  if (projectionLength > distance - pad) return true;
+  else return false;
+};
+
+vector.prototype.getWallReflect = function (vx, vy) {
+  if (this.X == 0) return [-1 * vx, vy];
+  else return [vx, -1 * vy];
 };

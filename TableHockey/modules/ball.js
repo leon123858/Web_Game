@@ -7,10 +7,10 @@ class ball {
     this._r = r; //半徑
     this._x = x; //x座標
     this._y = y; //y座標
-    this._v = 0; //順時速度
-    this._a = 0; //順時加速度
-    this._vg = 0; //速度方向
-    this._ag = 0; //加速度方向
+    this._vx = 0; //x速度
+    this._vy = 0; //y速度
+    this._ax = 0; //x加速度
+    this._ay = 0; //y加速度
     this._collisionWall = [];
   }
   get R() {
@@ -27,6 +27,11 @@ class ball {
   }
 }
 
+ball.prototype.setVelocity = function (vx, vy) {
+  this._vx = vx;
+  this._vy = vy;
+};
+
 ball.prototype.addCollisionThing = function (x1, y1, x2, y2) {
   let li = [x1, y1, x2, y2];
   this._collisionWall.push(li);
@@ -37,29 +42,25 @@ ball.prototype.detectWallCollision = function (Ox, Oy, Nx, Ny) {
     let li = this._collisionWall[i];
     let ballV = new vector(Ox, Oy, Nx, Ny);
     let WallV = new vector(li[0], li[1], li[2], li[3]);
-    let pad = ballV.ifBallImpact(WallV, this.r);
     //console.log(i, pad);
-    if (pad[0] != 0 || pad[1] != 0) {
+    if (ballV.ifBallImpactWall(WallV, this.r)) {
       console.log("impact");
-      this._x += 1.5 * pad[0];
-      this._y += 1.5 * pad[1];
-      this._vg = WallV.
-      //this._x = 100;
-      //this._y = Oy;
+      this._x = Ox;
+      this._y = Oy;
+      let Rv = WallV.getWallReflect(this._vx, this._vy);
+      this._vx = Rv[0];
+      this._vy = Rv[1];
     }
   }
 };
 
 ball.prototype.move = function () {
+  console.log(`vx:${this._vx},vy:${this._vy}`);
   let originX = this._x;
   let originY = this._y;
-  this._x += this._v * Math.cos(this._vg);
-  this._y += this._v * Math.sin(this._vg);
+  this._x += this._vx;
+  this._y += this._vy;
   this.detectWallCollision(originX, originY, this._x, this._y);
-};
-
-ball.prototype.setVelocity = function (v) {
-  this._v = v;
 };
 
 // function PointsDistance(x1, x2, y1, y2) {
