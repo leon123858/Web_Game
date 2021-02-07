@@ -21,7 +21,8 @@
     <script>
         const Printer = new printer("canvas");
         const Wall = new box(0, 0, Printer.Width, Printer.Height, "#AAAAAA");
-        var Ball = new ball(20, 20, 0, 0, 10);
+        var Ball = new ball(Printer.Width / 2, Printer.Height / 2, 0, 0, 10);
+        Ball.a = 1;
         var mousePlace = { x: 0, y: 0 };
         window.addEventListener('mousemove', (event) => {
             mousePlace.x = event.pageX;
@@ -29,8 +30,8 @@
         })
         var Hand = new hand(50, 50, mousePlace, 15, "#CCCCCC");
         var Timer = new timer(20, [Wall, Ball, Hand], Printer);
-        Ball.Vx = 5;
-        Ball.Vy = 5;
+        // Ball.Vx = 0;
+        // Ball.Vy = 0;
         Timer.Run();
 
     </script>

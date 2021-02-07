@@ -19,6 +19,11 @@ class vector {
   }
 }
 
+vector.prototype.setLength = function (N) {
+  this.X = (this.X / this.length) * N;
+  this.Y = (this.Y / this.length) * N;
+};
+
 vector.prototype.dot = function (x, y) {
   let l = Math.sqrt(x * x + y * y);
   if (l > 1) {

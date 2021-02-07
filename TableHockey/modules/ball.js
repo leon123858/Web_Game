@@ -7,6 +7,8 @@ class ball {
     this.BeforeY = Y_place;
     this.Vx = X_velocity;
     this.Vy = Y_velocity;
+    this.ax = 0.01;
+    this.ay = 0.01;
     this._radius = radius;
     this._color = typeof Color !== "undefined" ? Color : "#000000";
   }
@@ -18,6 +20,10 @@ class ball {
   }
   get Color() {
     return this._color;
+  }
+  set a(N) {
+    this.ax = N;
+    this.ay = N;
   }
 }
 
@@ -41,10 +47,11 @@ ball.prototype.SAT_box = function (OriginX, OriginY, BoxArray) {
     if (project[0] > X2 || X1 > project[1]) {
       //console.log("impact", project, [X2, X1]);
       this.X - OriginX > 0
-        ? (this.X = X2 - 5 * this.r)
-        : (this.X = X1 + 5 * this.r);
+        ? (this.X = X2 - 1.5 * this.r)
+        : (this.X = X1 + 1.5 * this.r);
       this.Y = OriginY;
       this.Vx *= -1;
+      return;
       //console.log("change to :", this.X, this.Y, this.Vx);
     }
     let Y_projection = 2 * this.r + ballPath.dot(0, 1);
@@ -63,10 +70,11 @@ ball.prototype.SAT_box = function (OriginX, OriginY, BoxArray) {
     if (project2[0] > Y2 || Y1 > project2[1]) {
       console.log("impact");
       this.Y - OriginY > 0
-        ? (this.Y = Y2 - 1 * this.r)
-        : (this.Y = Y1 + 5 * this.r);
+        ? (this.Y = Y2 - 1.5 * this.r)
+        : (this.Y = Y1 + 1.5 * this.r);
       this.X = OriginX;
       this.Vy *= -1;
+      return;
     }
   }
 };
@@ -78,6 +86,10 @@ ball.prototype.move = function () {
   const OriginY = this.Y;
   this.X += this.Vx;
   this.Y += this.Vy;
+  if (this.Vx > this.ax) this.Vx -= this.ax;
+  else if (this.Vx < -this.ax) this.Vx += this.ax;
+  if (this.Vy > this.ay) this.Vy -= this.ay;
+  else if (this.Vy < -this.ay) this.Vy += this.ay;
   this.BeforeX = OriginX;
   this.BeforeY = OriginY;
   return [OriginX, OriginY];

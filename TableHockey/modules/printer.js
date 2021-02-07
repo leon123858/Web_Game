@@ -32,6 +32,7 @@ printer.prototype._showBall = function (ball) {
 printer.prototype._showBox = function (box) {
   let context = this._canvas.getContext("2d");
   context.strokeStyle = box.Color;
+  context.lineWidth = 10;
   context.strokeRect(box.X, box.Y, box.Width, box.Height);
 };
 
