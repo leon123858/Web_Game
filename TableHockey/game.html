@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/style.css">
     <script src="./modules/ball.js"></script>
+    <script src="./modules/hand.js"></script>
+    <script src="./modules/box.js"></script>
     <script src='./modules/printer.js'></script>
     <script src="./modules/time.js"></script>
     <title>桌上曲棍球</title>
@@ -15,18 +17,22 @@
     <canvas id="canvas">
 
     </canvas>
-
+    <script src="./modules/vector.js"></script>
     <script>
-        const Printer = new printer('canvas');
-        var Ball = new ball(3, 4, 50, 50)
-        var Timer = new timer(40, Printer);
-        Ball.setVelocity(3, 0);
-        //console.log(Ball._vx, Ball._vy);
-        // Ball._vg = Math.PI / 16
-        Ball.addCollisionThing(200, 0, 200, 800);
-        Ball.addCollisionThing(0, 0, 0, 800);
-        Timer.addMission(Ball);
+        const Printer = new printer("canvas");
+        const Wall = new box(0, 0, Printer.Width, Printer.Height, "#AAAAAA");
+        var Ball = new ball(20, 20, 0, 0, 10);
+        var mousePlace = { x: 0, y: 0 };
+        window.addEventListener('mousemove', (event) => {
+            mousePlace.x = event.pageX;
+            mousePlace.y = event.pageY;
+        })
+        var Hand = new hand(50, 50, mousePlace, 15, "#CCCCCC");
+        var Timer = new timer(20, [Wall, Ball, Hand], Printer);
+        Ball.Vx = 5;
+        Ball.Vy = 5;
         Timer.Run();
+
     </script>
 </body>
 
