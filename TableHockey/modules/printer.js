@@ -36,8 +36,21 @@ printer.prototype._showBox = function (box) {
   context.strokeRect(box.X, box.Y, box.Width, box.Height);
 };
 
+printer.prototype._showMiddle = function () {
+  let context = this._canvas.getContext("2d");
+  context.lineWidth = 2;
+  context.strokeStyle = "#FFFFFF";
+  context.strokeRect(
+    this.Width / 2 - context.lineWidth,
+    0,
+    context.lineWidth,
+    this.Height
+  );
+};
+
 printer.prototype.draw = function (array) {
   this._clearCanvas();
+  this._showMiddle();
   array.forEach((element) => {
     switch (element.type) {
       case "ball":

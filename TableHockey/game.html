@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="./css/style.css">
     <script src="./modules/ball.js"></script>
     <script src="./modules/hand.js"></script>
+    <script src="./modules/enemyHand.js"></script>
     <script src="./modules/box.js"></script>
     <script src='./modules/printer.js'></script>
     <script src="./modules/time.js"></script>
@@ -19,16 +20,32 @@
     </canvas>
     <script src="./modules/vector.js"></script>
     <script>
+        function placeOffset(x1, x2, y1, y2, event, mousePlace) {
+            if (event.pageX < x1)
+                mousePlace.x = x1;
+            else if (event.pageX > x2)
+                mousePlace.x = x2;
+            else
+                mousePlace.x = event.pageX;
+            if (event.pageY < y1)
+                mousePlace.y = y1;
+            else if (event.pageY > y2)
+                mousePlace.y = y2;
+            else
+                mousePlace.y = event.pageY;
+        }
         const Printer = new printer("canvas");
         const Wall = new box(0, 0, Printer.Width, Printer.Height, "#AAAAAA");
         var Ball = new ball(Printer.Width / 2, Printer.Height / 2, 0, 0, 10);
-        Ball.a = 1;
+        Ball.a = 0.05;
         var mousePlace = { x: 0, y: 0 };
+        var enemyPlace = { x: 50, y: 50 };
         window.addEventListener('mousemove', (event) => {
-            mousePlace.x = event.pageX;
-            mousePlace.y = event.pageY;
+            placeOffset(0, Printer.Width / 2, 0, Printer.Height, event, mousePlace);
+            //placeOffset(Printer.Width / 2, Printer.Width, 0, Printer.Height, event, enemyPlace);
         })
         var Hand = new hand(50, 50, mousePlace, 15, "#CCCCCC");
+        //var EnemyHand = new enemyHand(100, 50, enemyPlace, 15, "#AA1133");
         var Timer = new timer(20, [Wall, Ball, Hand], Printer);
         // Ball.Vx = 0;
         // Ball.Vy = 0;
