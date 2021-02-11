@@ -21,8 +21,8 @@ class hand {
 hand.prototype.move = function () {
   const OriginX = this.X;
   const OriginY = this.Y;
-  this.X = mousePlace.x;
-  this.Y = mousePlace.y;
+  this.X = this._mousePlace.x;
+  this.Y = this._mousePlace.y;
   return [OriginX, OriginY];
 };
 
