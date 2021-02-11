@@ -4,9 +4,17 @@ class enemyAI {
     this._enemyPlace = enemyPlace;
     this._constantP = 0.2;
     this._ms = 15;
+    this._waitLength = 100;
+    this._changeModeRange = 5;
+    this._highSpeed = 10;
+    this._status = 0;
+    this._time = 0;
   }
   set offsetList(n) {
     this._offsetList = n;
+  }
+  get status() {
+    return this._status;
   }
 }
 
@@ -31,10 +39,65 @@ enemyAI.prototype._placeOffset = function () {
 };
 
 enemyAI.prototype._eachRound = function () {
-  this._enemyPlace.y += this._constantP * (this._Ball.Y - this._enemyPlace.y);
-  this._enemyPlace.x +=
-    this._constantP * (this._Ball.X + 100 - this._enemyPlace.x);
-  this._placeOffset();
+  switch (this._status) {
+    case 0:
+      this._enemyPlace.y +=
+        this._constantP * (this._Ball.Y - this._enemyPlace.y);
+      this._enemyPlace.x +=
+        this._constantP *
+        (this._Ball.X + this._waitLength - this._enemyPlace.x);
+      this._placeOffset();
+      if (
+        this._Ball.Y - this._enemyPlace.y < this._changeModeRange &&
+        Math.abs(this._Ball.X - this._enemyPlace.x) < this._waitLength
+      ) {
+        this._status = 1;
+        this._time = 20;
+      }
+      break;
+    case 1:
+      this._enemyPlace.y +=
+        this._constantP * (this._Ball.Y - this._enemyPlace.y);
+      this._enemyPlace.x +=
+        this._Ball.X - this._enemyPlace.x > 0
+          ? this._highSpeed
+          : -this._highSpeed;
+      this._placeOffset();
+      this._time--;
+      if (this._time < 0) this._status = 0;
+      break;
+    case 2:
+      this._enemyPlace.y +=
+        this._constantP *
+        (this._Ball.Y - this._enemyPlace.y - this._waitLength);
+      this._enemyPlace.x +=
+        (this._constantP / 2) *
+        (this._Ball.X + this._waitLength - this._enemyPlace.x);
+      this._placeOffset();
+      if (
+        Math.abs(this._Ball.Y - this._enemyPlace.y - this._waitLength) <
+        this._changeModeRange
+      )
+        this._status = 0;
+      break;
+    case 3:
+      this._enemyPlace.y +=
+        this._constantP *
+        (this._Ball.Y - this._enemyPlace.y + this._waitLength);
+      this._enemyPlace.x +=
+        (this._constantP / 2) *
+        (this._Ball.X + this._waitLength - this._enemyPlace.x);
+      this._placeOffset();
+      if (
+        Math.abs(this._Ball.Y - this._enemyPlace.y + this._waitLength) <
+        this._changeModeRange
+      )
+        this._status = 0;
+      break;
+    default:
+      //console.log(this._status);
+      break;
+  }
 };
 
 enemyAI.prototype.Run = function () {

@@ -34,11 +34,8 @@
         AI.Run();
         window.addEventListener('mousemove', (event) => {
             AI.placeOffset(0, Printer.Width / 2, 0, Printer.Height, event, mousePlace);
-            //placeOffset(Printer.Width / 2, Printer.Width, 0, Printer.Height, event, enemyPlace);
         })
         var Timer = new timer(20, [Wall, Ball, Hand, EnemyHand], Printer);
-        // Ball.Vx = 0;
-        // Ball.Vy = 0;
         Timer.Run();
 
     </script>

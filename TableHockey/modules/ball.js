@@ -79,8 +79,6 @@ ball.prototype.SAT_box = function (OriginX, OriginY, BoxArray) {
   }
 };
 
-ball.prototype.SAT_hand = function (OriginX, OriginY, HandArray) {};
-
 ball.prototype.move = function () {
   const OriginX = this.X;
   const OriginY = this.Y;
