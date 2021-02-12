@@ -8,6 +8,7 @@
     <script src="./modules/ball.js"></script>
     <script src="./modules/hand.js"></script>
     <script src="./modules/box.js"></script>
+    <script src="./modules/getPointBox.js"></script>
     <script src="./modules/enemyAI.js"></script>
     <script src='./modules/printer.js'></script>
     <script src="./modules/time.js"></script>
@@ -23,6 +24,10 @@
 
         const Printer = new printer("canvas");
         const Wall = new box(0, 0, Printer.Width, Printer.Height, "#AAAAAA");
+        const pointVecL = new vector(0, Printer.Height / 2 - 40, 0, Printer.Height / 2 + 40);
+        const pointVecR = new vector(Printer.Width, Printer.Height / 2 - 40, Printer.Width, Printer.Height / 2 + 40);
+        const GetPointBoxPlayer = new getPointBox(0, Printer.Height / 2 - 40, 10, 80, "#888888", 'player', pointVecL);
+        const GetPointBoxEnemy = new getPointBox(Printer.Width - 10, Printer.Height / 2 - 40, 10, 80, "#888888", 'enemy', pointVecR);
         var Ball = new ball(Printer.Width / 2, Printer.Height / 2, 0, 0, 10);
         Ball.a = 0.05;
         var mousePlace = { x: 0, y: 0 };
@@ -30,12 +35,12 @@
         var Hand = new hand(50, 50, mousePlace, 15, "#CCCCCC");
         var EnemyHand = new hand(100, 50, enemyPlace, 15, "#AA1133");
         var AI = new enemyAI(Ball, enemyPlace);
-        AI.offsetList = [Printer.Width / 2, Printer.Width, 0, Printer.Height];
+        AI.offsetList = [Printer.Width / 2 + 30, Printer.Width, 0, Printer.Height];
         AI.Run();
         window.addEventListener('mousemove', (event) => {
             AI.placeOffset(0, Printer.Width / 2, 0, Printer.Height, event, mousePlace);
         })
-        var Timer = new timer(20, [Wall, Ball, Hand, EnemyHand], Printer);
+        var Timer = new timer(20, [GetPointBoxPlayer, GetPointBoxEnemy, Wall, Ball, Hand, EnemyHand], Printer);
         Timer.Run();
 
     </script>

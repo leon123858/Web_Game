@@ -1,6 +1,8 @@
 class ball {
   constructor(X_place, Y_place, X_velocity, Y_velocity, radius, Color) {
     this._type = "ball";
+    this._OriginX = X_place;
+    this._OriginY = Y_place;
     this.X = X_place;
     this.Y = Y_place;
     this.BeforeX = X_place;
@@ -11,6 +13,7 @@ class ball {
     this.ay = 0.01;
     this._radius = radius;
     this._color = typeof Color !== "undefined" ? Color : "#000000";
+    this._offset = 3;
   }
   get type() {
     return this._type;
@@ -75,6 +78,55 @@ ball.prototype.SAT_box = function (OriginX, OriginY, BoxArray) {
       this.X = OriginX;
       this.Vy *= -1;
       return;
+    }
+  }
+};
+
+ball.prototype.reSetBall = function () {
+  this.X = this._OriginX;
+  this.Y = this._OriginY;
+  this.Vx = 0;
+  this.Vy = 0;
+};
+
+ball.prototype.SAT_getPointBox = function (OriginX, OriginY, PointBoxArray) {
+  for (var i in PointBoxArray) {
+    let secondStage = false;
+    let ballPath = new vector(OriginX, OriginY, this.X, this.Y);
+    let X_projection = 2 * this.r + ballPath.dot(1, 0);
+
+    let X_projection_point1 =
+      this.X - OriginX > 0 ? OriginX - this.r : OriginX + this.r;
+    let X_projection_point2 =
+      this.X - OriginX > 0
+        ? X_projection_point1 + X_projection
+        : X_projection_point1 - X_projection;
+    let project =
+      X_projection_point1 > X_projection_point2
+        ? [X_projection_point1, X_projection_point2]
+        : [X_projection_point2, X_projection_point1];
+    let X = PointBoxArray[i].vectorX;
+    if ((X - project[0]) * (X - project[1]) > 0) {
+      //console.log("impact when X axial");
+      secondStage = true;
+    }
+    if (secondStage) {
+      let ballPathN = ballPath.normal;
+      let N_projection = PointBoxArray[i].vector.dot(ballPathN.X, ballPathN.Y);
+      let distance1 = ballPath.distance(
+        PointBoxArray[i].vector._Xo,
+        PointBoxArray[i].vector._Yo
+      );
+      let distance2 = ballPath.distance(
+        PointBoxArray[i].vector._Xn,
+        PointBoxArray[i].vector._Yn
+      );
+
+      if (Math.abs(distance1 + distance2 - N_projection) < this._offset) {
+        console.log("impact when ball path");
+        this.reSetBall();
+        return;
+      }
     }
   }
 };

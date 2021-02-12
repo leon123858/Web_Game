@@ -57,6 +57,7 @@ printer.prototype.draw = function (array) {
         this._showBall(element);
         //console.log("show ball");
         break;
+      case "pointBox":
       case "box":
         this._showBox(element);
         //console.log("show box");

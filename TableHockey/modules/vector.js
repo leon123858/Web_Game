@@ -19,6 +19,27 @@ class vector {
   }
 }
 
+vector.prototype.distance = function (x, y) {
+  //3 side of triangle
+  var A = Math.abs(
+    Math.sqrt(Math.pow(x - this._Xo, 2) + Math.pow(y - this._Yo, 2))
+  );
+  var B = Math.abs(
+    Math.sqrt(Math.pow(x - this._Xn, 2) + Math.pow(y - this._Yn, 2))
+  );
+  var C = Math.abs(
+    Math.sqrt(
+      Math.pow(this._Xo - this._Xn, 2) + Math.pow(this._Yo - this._Yn, 2)
+    )
+  );
+  //use formula to get area of triangle
+  var P = (A + B + C) / 2;
+  var allArea = Math.abs(Math.sqrt(P * (P - A) * (P - B) * (P - C)));
+  //普通公式计算三角形面积反推点到线的垂直距离
+  var dis = (2 * allArea) / C;
+  return dis;
+};
+
 vector.prototype.setLength = function (N) {
   this.X = (this.X / this.length) * N;
   this.Y = (this.Y / this.length) * N;
