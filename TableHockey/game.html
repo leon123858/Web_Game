@@ -41,6 +41,7 @@
             AI.placeOffset(20, Printer.Width / 2 - 10, 20, Printer.Height - 20, event, mousePlace);
         })
         window.addEventListener('touchmove', (event) => {
+            alert(event)
             AI.placeOffset(20, Printer.Width / 2 - 10, 20, Printer.Height - 20, event, mousePlace);
         })
         var Timer = new timer(10, [GetPointBoxPlayer, GetPointBoxEnemy, Wall, Ball, Hand, EnemyHand], Printer);
