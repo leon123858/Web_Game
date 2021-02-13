@@ -1,8 +1,8 @@
 class printer {
   constructor(id) {
     this._canvas = window.document.getElementById(id);
-    this._canvas.height = window.innerHeight * 0.7;
-    this._canvas.width = window.innerWidth * 0.5;
+    this._canvas.height = window.innerHeight * 0.8;
+    this._canvas.width = window.innerWidth * 0.9;
     this._canvasWidth = this._canvas.width;
     this._canvasHeight = this._canvas.height;
   }
