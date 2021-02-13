@@ -13,4 +13,8 @@ class getPointBox extends box {
   get vector() {
     return this._vector;
   }
+
+  get who() {
+    return this._whoPoint;
+  }
 }

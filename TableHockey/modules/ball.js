@@ -30,48 +30,38 @@ class ball {
   }
 }
 
+ball.prototype._getBallProject = function (ballPath, x, y, point, Origin) {
+  let X_projection = 2 * this.r + Math.abs(ballPath.dot(x, y));
+  let X_projection_point1 =
+    point - Origin > 0 ? Origin - this.r : Origin + this.r;
+  let X_projection_point2 =
+    point - Origin > 0
+      ? X_projection_point1 + X_projection
+      : X_projection_point1 - X_projection;
+  return X_projection_point1 > X_projection_point2
+    ? [X_projection_point1, X_projection_point2]
+    : [X_projection_point2, X_projection_point1];
+};
+
 ball.prototype.SAT_box = function (OriginX, OriginY, BoxArray) {
   for (var i in BoxArray) {
     let ballPath = new vector(OriginX, OriginY, this.X, this.Y);
-    let X_projection = 2 * this.r + ballPath.dot(1, 0);
 
-    let X_projection_point1 =
-      this.X - OriginX > 0 ? OriginX - this.r : OriginX + this.r;
-    let X_projection_point2 =
-      this.X - OriginX > 0
-        ? X_projection_point1 + X_projection
-        : X_projection_point1 - X_projection;
-    let project =
-      X_projection_point1 > X_projection_point2
-        ? [X_projection_point1, X_projection_point2]
-        : [X_projection_point2, X_projection_point1];
+    let project = this._getBallProject(ballPath, 1, 0, this.X, OriginX);
     let X1 = BoxArray[i].X;
     let X2 = X1 + BoxArray[i].Width;
     if (project[0] > X2 || X1 > project[1]) {
-      //console.log("impact", project, [X2, X1]);
       this.X - OriginX > 0
         ? (this.X = X2 - 1.5 * this.r)
         : (this.X = X1 + 1.5 * this.r);
       this.Y = OriginY;
       this.Vx *= -1;
       return;
-      //console.log("change to :", this.X, this.Y, this.Vx);
     }
-    let Y_projection = 2 * this.r + ballPath.dot(0, 1);
-    let Y_projection_point1 =
-      this.Y - OriginY > 0 ? OriginY + this.r : OriginY - this.r;
-    let Y_projection_point2 =
-      this.Y - OriginY > 0
-        ? Y_projection_point1 + Y_projection
-        : Y_projection_point1 - Y_projection;
-    let project2 =
-      Y_projection_point1 > Y_projection_point2
-        ? [Y_projection_point1, Y_projection_point2]
-        : [Y_projection_point2, Y_projection_point1];
+    let project2 = this._getBallProject(ballPath, 0, 1, this.Y, OriginY);
     let Y1 = BoxArray[i].Y;
     let Y2 = Y1 + BoxArray[i].Height;
     if (project2[0] > Y2 || Y1 > project2[1]) {
-      console.log("impact");
       this.Y - OriginY > 0
         ? (this.Y = Y2 - 1.5 * this.r)
         : (this.Y = Y1 + 1.5 * this.r);
@@ -93,26 +83,17 @@ ball.prototype.SAT_getPointBox = function (OriginX, OriginY, PointBoxArray) {
   for (var i in PointBoxArray) {
     let secondStage = false;
     let ballPath = new vector(OriginX, OriginY, this.X, this.Y);
-    let X_projection = 2 * this.r + ballPath.dot(1, 0);
-
-    let X_projection_point1 =
-      this.X - OriginX > 0 ? OriginX - this.r : OriginX + this.r;
-    let X_projection_point2 =
-      this.X - OriginX > 0
-        ? X_projection_point1 + X_projection
-        : X_projection_point1 - X_projection;
-    let project =
-      X_projection_point1 > X_projection_point2
-        ? [X_projection_point1, X_projection_point2]
-        : [X_projection_point2, X_projection_point1];
+    let project = this._getBallProject(ballPath, 1, 0, this.X, OriginX);
     let X = PointBoxArray[i].vectorX;
-    if ((X - project[0]) * (X - project[1]) > 0) {
+    if ((X - project[0]) * (X - project[1]) < 0) {
       //console.log("impact when X axial");
       secondStage = true;
     }
     if (secondStage) {
       let ballPathN = ballPath.normal;
-      let N_projection = PointBoxArray[i].vector.dot(ballPathN.X, ballPathN.Y);
+      let N_projection = Math.abs(
+        PointBoxArray[i].vector.dot(ballPathN.X, ballPathN.Y)
+      );
       let distance1 = ballPath.distance(
         PointBoxArray[i].vector._Xo,
         PointBoxArray[i].vector._Yo
@@ -121,14 +102,18 @@ ball.prototype.SAT_getPointBox = function (OriginX, OriginY, PointBoxArray) {
         PointBoxArray[i].vector._Xn,
         PointBoxArray[i].vector._Yn
       );
-
-      if (Math.abs(distance1 + distance2 - N_projection) < this._offset) {
-        console.log("impact when ball path");
+      if (
+        Math.abs(distance1 + distance2 - N_projection) < this._offset &&
+        distance1 + distance2 != 0
+      ) {
+        //console.log("impact when ball path");
+        //console.log(distance1, distance2, N_projection, PointBoxArray[i].who);
         this.reSetBall();
-        return;
+        return true;
       }
     }
   }
+  return false;
 };
 
 ball.prototype.move = function () {

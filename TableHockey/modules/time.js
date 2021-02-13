@@ -32,8 +32,14 @@ timer.prototype._eachRound = function () {
   for (var i in this.MissionList)
     if (this.MissionList[i].type == "ball") {
       let place = this.MissionList[i].move();
-      this.MissionList[i].SAT_getPointBox(place[0], place[1], this._PointBox);
-      this.MissionList[i].SAT_box(place[0], place[1], this._Box);
+      if (
+        !this.MissionList[i].SAT_getPointBox(place[0], place[1], this._PointBox)
+      )
+        this.MissionList[i].SAT_box(place[0], place[1], this._Box);
+      else {
+        alert("得分了");
+        break;
+      }
     } else if (this.MissionList[i].type == "hand") {
       let place = this.MissionList[i].move();
       this.MissionList[i].timeSlice(place[0], place[1], this._Ball);

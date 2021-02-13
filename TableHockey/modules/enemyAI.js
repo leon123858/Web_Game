@@ -6,7 +6,7 @@ class enemyAI {
     this._ms = 15;
     this._waitLength = 100;
     this._changeModeRange = 5;
-    this._highSpeed = 10;
+    this._highSpeed = 15;
     this._status = 0;
     this._time = 0;
   }

@@ -59,14 +59,14 @@ hand.prototype.timeSlice = function (OriginX, OriginY, BallArray) {
         BallArray[i].X = this.X + V.X;
         BallArray[i].Y = this.Y + V.Y;
         V.setLength(
-          this.TwoPointDistance(OriginX, OriginY, this.X, this.Y) / 3 +
+          this.TwoPointDistance(OriginX, OriginY, this.X, this.Y) / 2 +
             this.TwoPointDistance(
               BallArray[i].BeforeX,
               BallArray[i].BeforeY,
               BallArray[i].X,
               BallArray[i].Y
             ) /
-              3
+              2
         );
 
         const limit = 25;
