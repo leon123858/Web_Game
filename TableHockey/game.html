@@ -35,12 +35,12 @@
         var Hand = new hand(50, 50, mousePlace, 15, "#CCCCCC");
         var EnemyHand = new hand(100, 50, enemyPlace, 15, "#AA1133");
         var AI = new enemyAI(Ball, enemyPlace);
-        AI.offsetList = [Printer.Width / 2 + 30, Printer.Width - 10, 10, Printer.Height - 10];
+        AI.offsetList = [Printer.Width / 2 + 30, Printer.Width - 20, 20, Printer.Height - 20];
         AI.Run();
         window.addEventListener('mousemove', (event) => {
-            AI.placeOffset(10, Printer.Width / 2 - 10, 10, Printer.Height - 10, event, mousePlace);
+            AI.placeOffset(20, Printer.Width / 2 - 10, 20, Printer.Height - 20, event, mousePlace);
         })
-        var Timer = new timer(20, [GetPointBoxPlayer, GetPointBoxEnemy, Wall, Ball, Hand, EnemyHand], Printer);
+        var Timer = new timer(10, [GetPointBoxPlayer, GetPointBoxEnemy, Wall, Ball, Hand, EnemyHand], Printer);
         //var Timer = new timer(20, [GetPointBoxPlayer, Wall, Ball, Hand, EnemyHand], Printer);
         Timer.Run();
 

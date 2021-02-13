@@ -3,15 +3,16 @@ class enemyAI {
     this._Ball = ball;
     this._enemyPlace = enemyPlace;
     this._constantP = 0.2;
-    this._ms = 15;
+    this._ms = 20;
     this._waitLength = 100;
     this._changeModeRange = 5;
-    this._highSpeed = 15;
+    this._highSpeed = 5;
     this._status = 0;
     this._time = 0;
   }
   set offsetList(n) {
     this._offsetList = n;
+    this._midLine = this._offsetList[2] + this._offsetList[3];
   }
   get status() {
     return this._status;
@@ -39,6 +40,7 @@ enemyAI.prototype._placeOffset = function () {
 };
 
 enemyAI.prototype._eachRound = function () {
+  console.log(this._status);
   switch (this._status) {
     case 0:
       this._enemyPlace.y +=
@@ -52,7 +54,10 @@ enemyAI.prototype._eachRound = function () {
         Math.abs(this._Ball.X - this._enemyPlace.x) < this._waitLength
       ) {
         this._status = 1;
-        this._time = 20;
+        this._time = 1500;
+      } else if (this._Ball.X >= this._enemyPlace.x) {
+        if (this._Ball.Y < this._midLine / 2) this._status = 2;
+        else this._status = 3;
       }
       break;
     case 1:
@@ -69,6 +74,20 @@ enemyAI.prototype._eachRound = function () {
     case 2:
       this._enemyPlace.y +=
         this._constantP *
+        (this._Ball.Y - this._enemyPlace.y + this._waitLength);
+      this._enemyPlace.x +=
+        (this._constantP / 2) *
+        (this._Ball.X + this._waitLength - this._enemyPlace.x);
+      this._placeOffset();
+      if (
+        Math.abs(this._Ball.Y - this._enemyPlace.y + this._waitLength) <=
+        this._changeModeRange
+      )
+        this._status = 0;
+      break;
+    case 3:
+      this._enemyPlace.y +=
+        this._constantP *
         (this._Ball.Y - this._enemyPlace.y - this._waitLength);
       this._enemyPlace.x +=
         (this._constantP / 2) *
@@ -80,20 +99,7 @@ enemyAI.prototype._eachRound = function () {
       )
         this._status = 0;
       break;
-    case 3:
-      this._enemyPlace.y +=
-        this._constantP *
-        (this._Ball.Y - this._enemyPlace.y + this._waitLength);
-      this._enemyPlace.x +=
-        (this._constantP / 2) *
-        (this._Ball.X + this._waitLength - this._enemyPlace.x);
-      this._placeOffset();
-      if (
-        Math.abs(this._Ball.Y - this._enemyPlace.y + this._waitLength) <
-        this._changeModeRange
-      )
-        this._status = 0;
-      break;
+
     default:
       //console.log(this._status);
       break;
