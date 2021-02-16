@@ -29,7 +29,7 @@
         const pointVecR = new vector(Printer.Width, Printer.Height / 2 - 40, Printer.Width, Printer.Height / 2 + 40);
         const GetPointBoxPlayer = new getPointBox(0, Printer.Height / 2 - 40, 10, 80, "#888888", 'player', pointVecL);
         const GetPointBoxEnemy = new getPointBox(Printer.Width - 10, Printer.Height / 2 - 40, 10, 80, "#888888", 'enemy', pointVecR);
-        var Ball = new ball(Printer.Width / 2, Printer.Height / 2, 0, 0, 10);
+        var Ball = new ball(Printer.Width / 2 - 100, Printer.Height / 2, 0, 0, 10);
         Ball.a = 0.01;
         var mousePlace = { x: 0, y: 0 };
         var enemyPlace = { x: Printer.Width / 2 + 50, y: Printer.Height / 2 };
