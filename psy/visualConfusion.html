@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./css/style.css">
+  <title>Document</title>
+</head>
+
+<body>
+  <canvas id="myCanvas">
+
+  </canvas>
+</body>
+<script>
+  const drawCircle = (ctx, color, r) => {
+    ctx.lineWidth = 0; //設定線條寬度
+    ctx.strokeStyle = "gray";
+    ctx.fillStyle = color; //設定填色色彩，可以填顏色名也可以填色碼
+    ctx.beginPath();
+    ctx.arc(c.offsetWidth / 2, c.offsetHeight / 2, r, 0, 2 * Math.PI);
+    ctx.stroke();
+    ctx.fill();//填色！
+  }
+  const drawSector = (ctx, color) => {
+    ctx.lineWidth = 10;
+    ctx.strokeStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(c.offsetWidth / 2 - 50, c.offsetHeight / 2);
+    const baseX = (c.offsetWidth / 2 - 50 + c.offsetWidth / 2) / 2;
+    const baseY = (c.offsetHeight / 2 + c.offsetHeight / 2 - 40) / 2;
+    const m = { x: 50, y: -40 };
+    const N = { x: -m.y, y: m.x };
+    const NLength = Math.sqrt(Math.pow(N.x, 2) + Math.pow(N.y, 2));
+    const eN = { x: 20 * -N.x / NLength, y: 20 * -N.y / NLength };
+
+    ctx.quadraticCurveTo(baseX + eN.x, baseY + eN.y, c.offsetWidth / 2, c.offsetHeight / 2 - 40);
+    ctx.stroke();
+  }
+
+
+  const c = document.getElementById("myCanvas");
+  const ctx = c.getContext("2d");
+  //畫底圓
+  drawCircle(ctx, "yellow", 50);
+  //畫第二色*6 二次曲線
+
+  drawSector(ctx, "blue");
+  //畫中間遮蓋
+  drawCircle(ctx, "gray", 30);
+</script>
+
+</html>
