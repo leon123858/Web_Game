@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <button id="connect">Connect</button>
+</body>
+<script>
+  const writeStream = (outputStream) => {
+    // CODELAB: Write to output stream
+    const writer = outputStream.getWriter();
+    const lines = ['aaa', 'bbb', 'ccc'];
+    lines.forEach((line) => {
+      console.log('[SEND]', line);
+      writer.write(line + '\n');
+    });
+    writer.releaseLock();
+    return;
+  }
+  const sendMsg = async () => {
+    const port = await navigator.serial.requestPort();
+    console.log(port);
+    // - Wait for the port to open.
+    await port.open({ baudRate: 9600 });
+    const encoder = new TextEncoderStream();
+    const outputDone = encoder.readable.pipeTo(port.writable);
+    const outputStream = encoder.writable;
+    return writeStream(outputStream);
+  }
+  const connectButton = document.getElementById("connect");
+  connectButton.addEventListener('click', () => {
+    sendMsg().then(re => console.log("success")).catch(err => console.log(err))
+  });
+
+
+</script>
+
+</html>
