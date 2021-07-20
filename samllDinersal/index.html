@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <title>Document</title>
+</head>
+
+<body>
+  <div>
+    <p id="dinersal"
+      style="background-color: red; left: 200px; top: 800px; width: 30px;height: 100px; position: absolute;">
+    </p>
+  </div>
+</body>
+<script>
+  const V0 = 20;
+  const a = 2;
+  const final_time = 2 * V0 / a;
+  let y = 0;
+  let t = -1;
+  $(document).keypress(function (event) {
+    //空格键的ascll码是32
+    if (event.keyCode == 32) {
+      t = t == -1 ? 0 : t;
+    }
+    console.log("click")
+  });
+
+  $(document).ready(async () => {
+    setInterval(() => {
+      if (t >= 0) {
+        y = V0 * t - 0.5 * a * t * t;
+        t++;
+      }
+      if (t > final_time)
+        t = -1
+      $("#dinersal").css("top", `${800 - y}px`);
+    }, 50)
+  })
+</script>
+
+</html>
