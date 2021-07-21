@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0,">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
   <title>Document</title>
 </head>
@@ -24,7 +24,7 @@
   let y = 0;
   let t = -1;
   let tall = 0;
-  const groundV = 1 * window.innerWidth / 100;
+  let groundV = 5 * window.innerWidth / 1000;
   const VW = window.innerWidth / 100;
   //操作
   $(document).keydown(function (event) {
@@ -55,7 +55,7 @@
       y: 550
     },
     big: {
-      height: 100,
+      height: 50,
       width: 30,
       y: 500
     }
@@ -67,13 +67,18 @@
   const createBox = (type) => {
     type = type || "small";
     const { height, width, y } = boxParameters[type]
-    $("#dinersal").after(`<p class = "box box-${type}"
+    $("#dinersal").after(`<p class = "box box-${type}" name = "${type}"
       style = "background-color: black; left: ${VW * 100}px; top: ${y}px; width: ${width}px;height: ${height}px;position: absolute;" >
     </p > `)
   }
   $(document).ready(async () => {
     createGrounds();
-    createBox("small");
+
+    //定期加速
+    setInterval(() => {
+      groundV += 1;
+    }, 1000)
+
     //跳躍物理
     setInterval(() => {
       if (t >= 0) {
@@ -84,7 +89,33 @@
         t = -1
       $("#dinersal").css("top", `${500 - y + tall}px`);
     }, 30)
+    //隨機產生障礙物
+    setInterval(() => {
+      const randomFloat = Math.random();
+      if (parseInt(randomFloat * 10) % 2 == 0)
+        if (randomFloat > 0.5) {
+          createBox("small");
+        }
+        else if (randomFloat > 0) {
+          createBox("big");
+        }
+    }, 700)
     //地面移動
+    const impact = (box) => {
+      const { y: boxY, height } = boxParameters[box.getAttribute("name")];
+      const topPin = boxY;
+      const lowPin = boxY + height;
+      const topD = 500 - y + tall;
+      const lowD = 500 - y + 100;
+      if ((topPin - topD) * (topPin - lowD) < 0) {
+        return true
+      }
+      if ((lowPin - topD) * (lowPin - lowD) < 0) {
+        return true
+      }
+      return false;
+    }
+
     setInterval(() => {
       for (let i = 0; i < 6; i++) {
         $(`#ground${i}`).css("left", (parseFloat($(`#ground${i}`).css("left")) - groundV).toString() + "px");
@@ -93,7 +124,16 @@
       }
       const boxArr = document.getElementsByClassName("box");
       for (let box of boxArr) {
-        box.style.left = (parseFloat(box.style.left) - groundV).toString() + "px";
+        const boxLeftBefore = parseFloat(box.style.left);
+        const boxLeftNow = boxLeftBefore - groundV;
+        box.style.left = boxLeftNow.toString() + "px";
+        if ((230 - boxLeftBefore) * (230 - boxLeftNow) < 0) {
+          if (impact(box)) {
+            alert("bomb");
+          }
+        }
+        else if (boxLeftNow < -200)
+          box.parentNode.removeChild(box);
       }
     }, 30);
   })
