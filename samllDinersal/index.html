@@ -4,16 +4,17 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,">
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
   <title>Document</title>
 </head>
 
-<body>
+<body style="overflow-y: hidden;overflow-x: hidden;">
   <div>
     <p id="dinersal"
-      style="background-color: red; left: 200px; top: 800px; width: 30px;height: 100px; position: absolute;">
+      style="background-color: red; left: 200px; top: 500px; width: 30px;height: 100px;position: absolute;">
     </p>
+
   </div>
 </body>
 <script>
@@ -22,15 +23,58 @@
   const final_time = 2 * V0 / a;
   let y = 0;
   let t = -1;
-  $(document).keypress(function (event) {
+  let tall = 0;
+  const groundV = 1 * window.innerWidth / 100;
+  const VW = window.innerWidth / 100;
+  //操作
+  $(document).keydown(function (event) {
     //空格键的ascll码是32
-    if (event.keyCode == 32) {
+    if (event.keyCode == 32 || event.which == 38) {
       t = t == -1 ? 0 : t;
+    }
+    else if (event.which == 40) {
+      $("#dinersal").css("height", "50px");
+      tall = 50;
+      $("#dinersal").css("top", `${500 - y + tall}px`);
     }
     console.log("click")
   });
 
+  $(document).keyup(function (event) {
+    if (event.which == 40 && tall == 50) {
+      tall = 0;
+      $("#dinersal").css("top", `${500 - y + tall}px`);
+      $("#dinersal").css("height", "100px");
+    }
+  })
+  //生成函數
+  const boxParameters = {
+    small: {
+      height: 50,
+      width: 30,
+      y: 550
+    },
+    big: {
+      height: 100,
+      width: 30,
+      y: 500
+    }
+  }
+  const createGrounds = () => {
+    for (let i = 0; i < 6; i++)
+      $("#dinersal").after(`<p id="ground${i}" style="top: 600px;left: ${20 * i}vw;width: 22vw;background-color:${i % 2 == 0 ? "black" : "gray"};position: absolute;">&ensp;</p>`)
+  }
+  const createBox = (type) => {
+    type = type || "small";
+    const { height, width, y } = boxParameters[type]
+    $("#dinersal").after(`<p class = "box box-${type}"
+      style = "background-color: black; left: ${VW * 100}px; top: ${y}px; width: ${width}px;height: ${height}px;position: absolute;" >
+    </p > `)
+  }
   $(document).ready(async () => {
+    createGrounds();
+    createBox("small");
+    //跳躍物理
     setInterval(() => {
       if (t >= 0) {
         y = V0 * t - 0.5 * a * t * t;
@@ -38,8 +82,20 @@
       }
       if (t > final_time)
         t = -1
-      $("#dinersal").css("top", `${800 - y}px`);
-    }, 50)
+      $("#dinersal").css("top", `${500 - y + tall}px`);
+    }, 30)
+    //地面移動
+    setInterval(() => {
+      for (let i = 0; i < 6; i++) {
+        $(`#ground${i}`).css("left", (parseFloat($(`#ground${i}`).css("left")) - groundV).toString() + "px");
+        if (parseInt($(`#ground${i}`).css("left")) <= -window.innerWidth / 5)
+          $(`#ground${i}`).css("left", "100vw")
+      }
+      const boxArr = document.getElementsByClassName("box");
+      for (let box of boxArr) {
+        box.style.left = (parseFloat(box.style.left) - groundV).toString() + "px";
+      }
+    }, 30);
   })
 </script>
 
